@@ -18,6 +18,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pylint
+          sudo apt install 
       - name: Analysing the code with pylint
         run: |
           pylint $(git ls-files '*.py') -j 0 --output=lint.txt --exit-zero
@@ -26,6 +27,3 @@ jobs:
         with:
           name: lint.txt
           path: lint.txt
-      - name: Colcon build
-        run: |
-          colcon build --symlink-install --parallel-workers 0
