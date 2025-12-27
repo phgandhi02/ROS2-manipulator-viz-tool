@@ -59,17 +59,17 @@ node = rclpy.create_node("test_node")
 message_type = String # imported
 queue_size = 10       # safe default
 topic_name = "test_ping"
-publisher = node.create_publisher(message_type, topic_name, queue_size)     # giving our node the ability to speak
+publisher = node.create_publisher(message_type, topic_name, queue_size)     # type: ignore # giving our node the ability to speak
 
 # 4. Create the Subscriber (i.e. the Ear)
-received_list = []                  # creates an empty list
-def hear_message(msg):              # in python functions are always define above
-    received_list.append(msg.data)  # adds to the list
-    print(f"Received: {msg.data}")
+received_list: list[str] = []                  # creates an empty list
+def hear_message(msg: String):              # in python functions are always define above
+    received_list.append(msg.data)  # type: ignore # adds to the list
+    print(f"Received: {msg.data}")   # type: ignore
 
 # hear_message: is the name of the function and is use later when a message arrives.
 # since the Subscriber needs to save the function, we do not use parentheses here
-subscriber = node.create_subscription(message_type, topic_name, hear_message, queue_size) # giving our node the ability to hear
+subscriber = node.create_subscription(message_type, topic_name, hear_message, queue_size) # type: ignore # giving our node the ability to hear
 
 # 5. Publish a message (i.e. Place it inside a message object)
 msg = String()         # create a blank String message object (i.e. The Envelope) 
