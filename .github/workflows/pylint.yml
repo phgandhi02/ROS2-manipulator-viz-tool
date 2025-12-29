@@ -1,6 +1,6 @@
-name: Test_Colcon_Build
+name: pylint
 
-on: [push]
+on: [push,pull_request]
 
 jobs:
   build:
@@ -26,3 +26,4 @@ jobs:
         with:
           name: lint.txt
           path: lint.txt
+      
