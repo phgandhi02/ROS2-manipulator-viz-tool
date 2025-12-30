@@ -21,6 +21,15 @@
   <!-- backward_ros is a stack trace pretty printer for C++ -->
   <!-- More details can be found here: https://github.com/bombela/backward-cpp -->
   <depend>backward_ros</depend>
+  <!-- hardware_interface, pluginlib, rclcpp, and rclcpp_lifecylce are dependencies
+    required for writing a hardware interface
+    Check the following link for more details:
+    https://control.ros.org/master/doc/ros2_control/hardware_interface/doc/writing_new_hardware_component.html
+  -->
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
   <exec_depend>rviz2</exec_depend>
 
   <export>
