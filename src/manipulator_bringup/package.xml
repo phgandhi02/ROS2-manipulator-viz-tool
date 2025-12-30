@@ -17,6 +17,10 @@
   <!-- ros2_control_cmake dep simplifies CMakeLists.txt by providing CMake macros -->
    <!-- More details here: https://github.com/ros-controls/ros2_control_cmake -->
   <build_depend>ros2_control_cmake</build_depend>
+
+  <!-- backward_ros is a stack trace pretty printer for C++ -->
+  <!-- More details can be found here: https://github.com/bombela/backward-cpp -->
+  <depend>backward_ros</depend>
   <exec_depend>rviz2</exec_depend>
 
   <export>
