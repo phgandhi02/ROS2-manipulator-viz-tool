@@ -3,12 +3,15 @@
 <package format="3">
   <name>manipulator_bringup</name>
   <version>0.0.0</version>
-  <description>Package with URDF and description files of test robots.</description>
+  <description>Demoros2_control simulation with 6Dof Manipulator.</description>
 
   <maintainer email="phgandh2@ncsu.edu">Prem Gandhi</maintainer>
   <maintainer email="ljimenez@ennovatec.co">Luis Jimenez</maintainer>
 
   <license>MIT</license>
+
+  <author email="phgandh2@ncsu.edu">Prem Gandhi</author>
+  <author email="ljimenez@ennovatec.co">Luis Jimenez</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
