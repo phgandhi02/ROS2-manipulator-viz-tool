@@ -37,6 +37,9 @@
   <!-- ros_gz_bridge for enabling communication between ros2 and gazebo -->
   <!-- Basic usage doc: https://gazebosim.org/docs/latest/ros2_integration/ -->
   <exec_depend>ros_gz_bridge</exec_depend>
+  <!-- ros_gz_sim for launching gazebo from ros2 -->
+  <!-- Basic usage doc: https://gazebosim.org/docs/latest/ros2_launch_gazebo/ -->
+  <exec_depend>ros_gz_sim</exec_depend>
   <exec_depend>rviz2</exec_depend>
   <!-- Xacro used to simplify building URDF files  -->
   <!-- More details here: https://wiki.ros.org/xacro -->
