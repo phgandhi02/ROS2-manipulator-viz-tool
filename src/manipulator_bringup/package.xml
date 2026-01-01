@@ -63,6 +63,14 @@
   <!-- Code available here: https://github.com/ros-controls/ros2_controllers/tree/jazzy/ros2_controllers_test_nodes -->
   <!-- <exec_depend>ros2_controllers_test_nodes</exec_depend> -->
 
+  <!-- 
+    Publishes joint_state from robot description and presents on GUI for easy reading and
+    controlling using sliders joint_state_broadcaster reads from state_interfaces and 
+    updates the joint_states while joint_state_publisher reads and updates the 
+    robot_description topic.
+  -->
+  <!-- More details for joint_state_publisher and joint_state_publisher_gui: https://wiki.ros.org/joint_state_publisher -->
+  <!-- <exec_depend>joint_state_publisher_gui</exec_depend> -->
   <export>
     <build_type>ament_cmake</build_type>
   </export>
