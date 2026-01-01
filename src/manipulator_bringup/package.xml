@@ -59,6 +59,11 @@
   <exec_depend>xacro</exec_depend>
   <!-- Pkg used for running launch files from CLI -->
   <exec_depend>ros2launch</exec_depend>
+
+  <!-- Not currently used. forward_command_controller for implementing ros2_control controller on grippers.  -->
+  <!-- User doc here: https://github.com/ros-controls/ros2_controllers/blob/jazzy/forward_command_controller/doc/userdoc.rst -->
+  <!-- <exec_depend>forward_command_controller</exec_depend> -->
+
   <!-- pkg for testing the ros2_controllers for correct, working output  -->
   <!-- Code available here: https://github.com/ros-controls/ros2_controllers/tree/jazzy/ros2_controllers_test_nodes -->
   <!-- <exec_depend>ros2_controllers_test_nodes</exec_depend> -->
