@@ -43,6 +43,9 @@
   <!-- joint_state_broadcaster for publishing state_interfaces on /joint_states  -->
   <!-- More details here: https://control.ros.org/jazzy/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html -->
   <exec_depend>joint_state_broadcaster</exec_depend>
+  <!-- ros2_control controller with options for controlling robot with position, velocity, and effort inputs. -->
+  <!-- More details here: https://control.ros.org/jazzy/doc/ros2_controllers/joint_trajectory_controller/doc/userdoc.html -->
+  <exec_depend>joint_trajectory_controller</exec_depend>
   <exec_depend>rviz2</exec_depend>
   <!-- Xacro used to simplify building URDF files  -->
   <!-- More details here: https://wiki.ros.org/xacro -->
