@@ -46,6 +46,10 @@
   <!-- ros2_control controller with options for controlling robot with position, velocity, and effort inputs. -->
   <!-- More details here: https://control.ros.org/jazzy/doc/ros2_controllers/joint_trajectory_controller/doc/userdoc.html -->
   <exec_depend>joint_trajectory_controller</exec_depend>
+  <!-- robot_state_publisher takes the description and joint angles of the robot as inputs
+  and publishes the 3D poses of the robot links on the /tf topic, using a kinematic tree model
+  of the robot -->
+  <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rviz2</exec_depend>
   <!-- Xacro used to simplify building URDF files  -->
   <!-- More details here: https://wiki.ros.org/xacro -->
