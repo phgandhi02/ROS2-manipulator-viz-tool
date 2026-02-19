@@ -26,6 +26,18 @@ The following pre-requisites are necessary to run and develop the visualization 
 - [ros2_control](https://control.ros.org/jazzy/doc/getting_started/getting_started.html)
   - Ensure ros2_control-gazebo communication is set up. [ros2_control installation guide](https://control.ros.org/jazzy/doc/gz_ros2_control/doc/index.html)
 
+### Build
+
+The repo can be build with the following cmds assuming the dependencies [above](#dependencies) are met. 
+
+```bash
+cd ./bartending_cobot
+sudo rosdep init
+rosdep update
+rosdep install --from-paths src -y --ignore-src
+colcon build --symlink
+```
+
 ### Github Actions
 This repo implements various github actions to ensure a smooth CI/CD process and enable faster prototyping. The actions implemented are described below:
 - [pylint.yaml](.github/workflows/pylint.yml) workflow: This action is designed to ensure that code is the highest quality. It will find all the python files in the repo and then produce a lint.txt as an artifact which can be downloaded from Github.
