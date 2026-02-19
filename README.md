@@ -16,6 +16,7 @@ A 6dof robot manipulator + end-effector (e.g. 7dof) controlled using ROS2 Jazzy 
 
 ## Project Description
 
+A handoff to the cobot will be initiated via button and hardcoded location placement or intent inference with HRC techniques, etc. Then the handoff bartending cobot will take the cocktail shaker and the arm will make a motion that will shake the contents within the cocktail shaker. Finally, the bartending cobot will place the cocktail shaker back in a predetermined location or using kind of advanced algorithm to negotiate handoff back to the human.
 
 ## Install
 
@@ -25,6 +26,7 @@ The following pre-requisites are necessary to run program for the bartending cob
   - Ensure `colcon` is installed and set up.
   - Ensure rviz2 is installed: `sudo apt install ros-jazzy-rviz2`
   - Install xacro if not already installed: `sudo apt install ros-jazzy-xacro`
+  - Ensure rosdep is install `sudo apt-get install python3-rosdep`
 - [Gazebo Harmonic](https://gazebosim.org/docs/harmonic/install/)
   - Ensure Gazebo is properly installed and configured to work with ROS 2 Jazzy. [Dependency install guide](https://gazebosim.org/docs/harmonic/ros_installation/): `sudo apt-get install ros-${ROS_DISTRO}-ros-gz`
 - [ros2_control](https://control.ros.org/jazzy/doc/getting_started/getting_started.html)
@@ -46,6 +48,10 @@ colcon build --symlink
 
 
 
+## Dev Notes
+
+### Dev Dependencies
+Install all dependencies under the [dependencies section](#dependencies). 
 
 ### Github Actions
 This repo implements various github actions to ensure a smooth CI/CD process and enable faster prototyping. The actions implemented are described below:
