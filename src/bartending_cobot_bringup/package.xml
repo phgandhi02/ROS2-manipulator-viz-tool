@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>bartending_cobot_bringup</name>
+  <version>0.0.0</version>
+  <description>Demo using ros2_control and Gazebo simulation with 6Dof Manipulator.</description>
+
+  <maintainer email="phgandh2@ncsu.edu">Prem Gandhi</maintainer>
+
+  <license>MIT</license>
+
+  <author email="phgandh2@ncsu.edu">Prem Gandhi</author>
+  <author email="ljimenez@ennovatec.co">Luis Jimenez</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <!-- ros2_control_cmake dep simplifies CMakeLists.txt by providing CMake macros -->
+   <!-- More details here: https://github.com/ros-controls/ros2_control_cmake -->
+  <build_depend>ros2_control_cmake</build_depend>
+
+  <!-- backward_ros is a stack trace pretty printer for C++ -->
+  <!-- More details can be found here: https://github.com/bombela/backward-cpp -->
+  <depend>backward_ros</depend>
+  <!-- hardware_interface, pluginlib, rclcpp, and rclcpp_lifecylce are dependencies
+    required for writing a hardware interface
+    Check the following link for more details:
+    https://control.ros.org/master/doc/ros2_control/hardware_interface/doc/writing_new_hardware_component.html
+  -->
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+
+  <!-- ros2_control node for managing controllers -->
+  <!-- Brief explanation here: https://control.ros.org/jazzy/doc/getting_started/getting_started.html#controller-manager -->
+  <exec_depend>controller_manager</exec_depend>
+  <!-- ros_gz_bridge for enabling communication between ros2 and gazebo -->
+  <!-- Basic usage doc: https://gazebosim.org/docs/latest/ros2_integration/ -->
+  <exec_depend>ros_gz_bridge</exec_depend>
+  <!-- ros_gz_sim for launching gazebo from ros2 -->
+  <!-- Basic usage doc: https://gazebosim.org/docs/latest/ros2_launch_gazebo/ -->
+  <exec_depend>ros_gz_sim</exec_depend>
+  <!-- joint_state_broadcaster for publishing state_interfaces on /joint_states  -->
+  <!-- More details here: https://control.ros.org/jazzy/doc/ros2_controllers/joint_state_broadcaster/doc/userdoc.html -->
+  <exec_depend>joint_state_broadcaster</exec_depend>
+  <!-- ros2_control controller with options for controlling robot with position, velocity, and effort inputs. -->
+  <!-- More details here: https://control.ros.org/jazzy/doc/ros2_controllers/joint_trajectory_controller/doc/userdoc.html -->
+  <exec_depend>joint_trajectory_controller</exec_depend>
+  <!-- robot_state_publisher takes the description and joint angles of the robot as inputs
+  and publishes the 3D poses of the robot links on the /tf topic, using a kinematic tree model
+  of the robot -->
+  <exec_depend>robot_state_publisher</exec_depend>
+  <!-- ros2controlcli provides CLI commands for managing ros2_control controllers -->
+  <!-- Detailed usage here: https://control.ros.org/master/doc/ros2_control/ros2controlcli/doc/userdoc.html -->
+  <exec_depend>ros2controlcli</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <!-- Xacro used to simplify building URDF files  -->
+  <!-- More details here: https://wiki.ros.org/xacro -->
+  <exec_depend>xacro</exec_depend>
+  <!-- Pkg used for running launch files from CLI -->
+  <exec_depend>ros2launch</exec_depend>
+
+  <!-- Not currently used. forward_command_controller for implementing ros2_control controller on grippers.  -->
+  <!-- User doc here: https://github.com/ros-controls/ros2_controllers/blob/jazzy/forward_command_controller/doc/userdoc.rst -->
+  <!-- <exec_depend>forward_command_controller</exec_depend> -->
+
+  <!-- pkg for testing the ros2_controllers for correct, working output  -->
+  <!-- Code available here: https://github.com/ros-controls/ros2_controllers/tree/jazzy/ros2_controllers_test_nodes -->
+  <!-- <exec_depend>ros2_controllers_test_nodes</exec_depend> -->
+
+  <!--
+    Publishes joint_state from robot description and presents on GUI for easy reading and
+    controlling using sliders joint_state_broadcaster reads from state_interfaces and
+    updates the joint_states while joint_state_publisher reads and updates the
+    robot_description topic.
+  -->
+  <!-- More details for joint_state_publisher and joint_state_publisher_gui: https://wiki.ros.org/joint_state_publisher -->
+  <!-- <exec_depend>joint_state_publisher_gui</exec_depend> -->
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

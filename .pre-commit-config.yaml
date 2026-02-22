@@ -60,13 +60,6 @@ repos:
     - id: flake8
       args: ["--extend-ignore=E501"]
 
-  # CPP hooks
-  - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v21.1.6
-    hooks:
-      - id: clang-format
-        args: ['-fallback-style=none', '-i']
-
   - repo: local
     hooks:
       - id: ament_cppcheck
@@ -75,9 +68,6 @@ repos:
         entry: env AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS=1 ament_cppcheck
         language: system
         files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
-
-  - repo: local
-    hooks:
       - id: ament_cpplint
         name: ament_cpplint
         description: Static code analysis of C/C++ files.
@@ -85,25 +75,12 @@ repos:
         language: system
         files: \.(h\+\+|h|hh|hxx|hpp|cuh|c|cc|cpp|cu|c\+\+|cxx|tpp|txx)$
         args: ["--linelength=100", "--filter=-whitespace/newline"]
-
-  # Cmake hooks
-  - repo: local
-    hooks:
       - id: ament_lint_cmake
         name: ament_lint_cmake
         description: Check format of CMakeLists.txt files.
         entry: ament_lint_cmake
         language: system
         files: CMakeLists\.txt$
-
-  # Copyright
-  - repo: local
-    hooks:
-      - id: ament_copyright
-        name: ament_copyright
-        description: Check if copyright notice is available in all files.
-        entry: ament_copyright
-        language: system
 
   # Docs - RestructuredText hooks
   - repo: https://github.com/PyCQA/doc8
