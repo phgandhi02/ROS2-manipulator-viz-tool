@@ -13,109 +13,85 @@
 # limitations under the License.
 
 from launch import LaunchDescription
-from launch.actions import RegisterEventHandler, DeclareLaunchArgument
-from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
-from launch.substitutions import Command, FindExecutable, PathJoinSubstitution, LaunchConfiguration
-
 from launch_ros.actions import Node
-from launch_ros.substitutions import FindPackageShare
+from launch.actions import SetEnvironmentVariable, IncludeLaunchDescription, DeclareLaunchArgument
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
+from launch_ros.substitutions import FindPackageShare, FindPackagePrefix
 
 
 def generate_launch_description():
-    # Declare arguments
-    declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "gui",
-            default_value="true",
-            description="Start RViz2 automatically with this launch file.",
-        )
+    # launch config vars to tell launch file that these args will be declared
+    ur_type = LaunchConfiguration("ur_type")
+    world_file = LaunchConfiguration("world_file")
+
+    ros_gz_sim_pkg_path = FindPackageShare("ros_gz_sim")
+
+    ur_description_path_share = FindPackageShare("ur_description")
+    ur_description_path_prefix = FindPackagePrefix("ur_description")
+    gz_launch_path = PathJoinSubstitution([ros_gz_sim_pkg_path, "launch", "gz_sim.launch.py"])
+    # gz_model_launch_path = PathJoinSubstitution(
+    #     [ros_gz_sim_pkg_path, "launch", "gz_spawn_model.launch.py"]
+    # )
+    ur_description_launch_path = PathJoinSubstitution(
+        [ur_description_path_share, "launch", "view_ur.launch.py"]
     )
-    # Get URDF via xacro
-    robot_description_content = Command(
+
+    return LaunchDescription(
         [
-            PathJoinSubstitution([FindExecutable(name="xacro")]),
-            " ",
-            PathJoinSubstitution(
-                [
-                    FindPackageShare("ros2_control_demo_example_7"),
-                    "urdf",
-                    "r6bot.urdf.xacro",
-                ]
+            DeclareLaunchArgument(
+                "ur_type",
+                default_value="ur5e",
+                description="type of Universal robot manipulator to load in",
             ),
+            DeclareLaunchArgument(
+                "world_file",
+                default_value="empty.sdf",
+                description="path/name of SDF file to launch Gazebo with ",
+            ),
+            SetEnvironmentVariable(
+                "GZ_SIM_RESOURCE_PATH", PathJoinSubstitution([ur_description_path_prefix, "share"])
+            ),
+            # SetEnvironmentVariable(
+            #     'GZ_SIM_PLUGIN_PATH',
+            #     PathJoinSubstitution([ur_description_mesh_path])
+            # ),
+            SetEnvironmentVariable(
+                "GAZEBO_MODEL_PATH", PathJoinSubstitution([ur_description_path_prefix, "share"])
+            ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(gz_launch_path),
+                launch_arguments={
+                    # Replace with your own world file
+                    "gz_args": [world_file],
+                    "on_exit_shutdown": "True",
+                }.items(),  # type: ignore
+            ),
+            IncludeLaunchDescription(
+                launch_description_source=PythonLaunchDescriptionSource(
+                    ur_description_launch_path
+                ),
+                launch_arguments={"ur_type": ur_type}.items(),
+            ),
+            Node(
+                package="ros_gz_sim",
+                executable="create",
+                arguments=["-topic", "robot_description"],
+            ),
+            # IncludeLaunchDescription(
+            #     launch_description_source=PythonLaunchDescriptionSource(gz_model_launch_path),
+            #     launch_arguments={
+            #         'world': 'empty'
+            #     }.items()
+            # ),
+            # # Bridging and remapping Gazebo topics to ROS 2 (replace with your own topics)
+            # Node(
+            #     package='ros_gz_bridge',
+            #     executable='parameter_bridge',
+            #     arguments=['/example_imu_topic@sensor_msgs/msg/Imu@gz.msgs.IMU',],
+            #     remappings=[('/example_imu_topic',
+            #                  '/remapped_imu_topic'),],
+            #     output='screen'
+            # ),
         ]
     )
-    robot_description = {"robot_description": robot_description_content}
-
-    robot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare("ros2_control_demo_example_7"),
-            "config",
-            "r6bot_controller.yaml",
-        ]
-    )
-    rviz_config_file = PathJoinSubstitution(
-        [FindPackageShare("ros2_control_demo_description"), "r6bot/rviz", "view_robot.rviz"]
-    )
-
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[robot_controllers],
-        output="both",
-    )
-    robot_state_pub_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[robot_description],
-    )
-
-    gui = LaunchConfiguration("gui")
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file],
-        condition=IfCondition(gui),
-    )
-
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster"],
-    )
-
-    robot_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["r6bot_controller", "--param-file", robot_controllers],
-    )
-
-    # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz_node],
-        )
-    )
-
-    # Delay start of robot_controller after `joint_state_broadcaster`
-    delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_controller_spawner],
-        )
-    )
-
-    nodes = [
-        control_node,
-        robot_state_pub_node,
-        joint_state_broadcaster_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
-    ]
-
-    return LaunchDescription(declared_arguments + nodes)
