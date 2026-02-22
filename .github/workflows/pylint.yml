@@ -1,16 +1,16 @@
 name: pylint
 
-on: 
+on:
   push:
     branches:
       - main
-      - dev
+      # - dev
     paths:
       - 'src/**'
   pull_request:
     branches:
       - main
-      - dev
+      # - dev
     paths:
       - 'src/**'
 
@@ -38,4 +38,3 @@ jobs:
         with:
           name: lint.txt
           path: lint.txt
-      
