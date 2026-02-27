@@ -26,13 +26,11 @@ def generate_launch_description():
     world_file = LaunchConfiguration("world_file")
 
     ros_gz_sim_pkg_path = FindPackageShare("ros_gz_sim")
-
     ur_description_path_share = FindPackageShare("ur_description")
     ur_description_path_prefix = FindPackagePrefix("ur_description")
+
     gz_launch_path = PathJoinSubstitution([ros_gz_sim_pkg_path, "launch", "gz_sim.launch.py"])
-    # gz_model_launch_path = PathJoinSubstitution(
-    #     [ros_gz_sim_pkg_path, "launch", "gz_spawn_model.launch.py"]
-    # )
+
     ur_description_launch_path = PathJoinSubstitution(
         [ur_description_path_share, "launch", "view_ur.launch.py"]
     )
@@ -78,12 +76,6 @@ def generate_launch_description():
                 executable="create",
                 arguments=["-topic", "robot_description"],
             ),
-            # IncludeLaunchDescription(
-            #     launch_description_source=PythonLaunchDescriptionSource(gz_model_launch_path),
-            #     launch_arguments={
-            #         'world': 'empty'
-            #     }.items()
-            # ),
             # # Bridging and remapping Gazebo topics to ROS 2 (replace with your own topics)
             # Node(
             #     package='ros_gz_bridge',
