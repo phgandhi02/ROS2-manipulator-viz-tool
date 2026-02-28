@@ -302,7 +302,7 @@
   </joint>
   <ros2_control name="ur" type="system">
     <hardware>
-      <plugin>mock_components/GenericSystem</plugin>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
       <param name="mock_sensor_commands">True</param>
       <param name="state_following_offset">0.0</param>
       <param name="calculate_dynamics">true</param>
