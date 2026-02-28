@@ -35,6 +35,23 @@ def generate_launch_description():
         [ur_description_path_share, "launch", "view_ur.launch.py"]
     )
 
+    gz_spawn_robot = Node(
+        package="ros_gz_sim",
+        executable="create",
+        arguments=["-topic", "robot_description"],
+    )
+
+    joint_state_broadcaster_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"]
+    )
+    r6bot_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["r6bot_controller", "--controller-manager", "/controller_manager"]
+    )
+
     # launch_ur_description = IncludeLaunchDescription(
     #     launch_description_source=PythonLaunchDescriptionSource(
     #         ur_description_launch_path
@@ -51,6 +68,38 @@ def generate_launch_description():
             }],
             arguments=["/home/prem/code/bartending_cobot/src/bartending_cobot_description/urdf/bartending_cobot.xacro.urdf"]
         )
+    ld = LaunchDescription(
+        [
+            # Launch gazebo environment
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    [PathJoinSubstitution([FindPackageShare('ros_gz_sim'),
+                                            'launch',
+                                            'gz_sim.launch.py'])]),
+                launch_arguments=[('gz_args', [' -r -v 1 empty.sdf'])]),
+            # make sure ur_description launch started and then robot is spawned in gazebo
+            RegisterEventHandler(
+                event_handler=OnProcessStart(
+                    target_action=robot_description,
+                    on_start=[gz_spawn_robot],
+                )
+            ),
+            # make sure robot is spawned and then joint_state_broadcaster is started
+            RegisterEventHandler(
+                event_handler=OnProcessExit(
+                    target_action=gz_spawn_robot,
+                    on_exit=[joint_state_broadcaster_controller_spawner],
+                )
+            ),
+            # make sure r6bot controller started after joint_state_broadcaster controller
+            RegisterEventHandler(
+                event_handler=OnProcessExit(
+                    target_action=joint_state_broadcaster_controller_spawner,
+                    on_exit=[r6bot_controller_spawner],
+                )
+            ),
+            bridge,
+            robot_description,
             DeclareLaunchArgument(
                 "ur_type",
                 default_value="ur5e",
@@ -70,39 +119,8 @@ def generate_launch_description():
             # ),
             SetEnvironmentVariable(
                 "GAZEBO_MODEL_PATH", PathJoinSubstitution([ur_description_path_prefix, "share"])
-            ),
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(gz_launch_path),
-                launch_arguments={
-                    # Replace with your own world file
-                    "gz_args": [world_file],
-                    "on_exit_shutdown": "True",
-                }.items(),  # type: ignore
-            ),
-            IncludeLaunchDescription(
-                launch_description_source=PythonLaunchDescriptionSource(
-                    ur_description_launch_path
-                ),
-                launch_arguments={"ur_type": ur_type}.items(),
-            ),
-            Node(
-                package="ros_gz_sim",
-                executable="create",
-                arguments=["-topic", "robot_description"],
-            ),
-            # # Bridging and remapping Gazebo topics to ROS 2 (replace with your own topics)
-            # Node(
-            #     package='ros_gz_bridge',
-            #     executable='parameter_bridge',
-            #     arguments=['/example_imu_topic@sensor_msgs/msg/Imu@gz.msgs.IMU',],
-            #     remappings=[('/example_imu_topic',
-            #                  '/remapped_imu_topic'),],
-            #     output='screen'
-            # ),
-            Node(
-                package="joint_state_publisher_gui",
-                executable="joint_state_publisher_gui",
-                output="screen",
-            ),
+            )
         ]
     )
+
+    return ld
