@@ -15,6 +15,8 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from launch.actions import SetEnvironmentVariable, IncludeLaunchDescription, DeclareLaunchArgument
+from launch.actions import RegisterEventHandler
+from launch.event_handlers import OnProcessExit, OnProcessStart
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare, FindPackagePrefix
@@ -25,14 +27,18 @@ def generate_launch_description():
     ur_type = LaunchConfiguration("ur_type")
     world_file = LaunchConfiguration("world_file")
 
-    ros_gz_sim_pkg_path = FindPackageShare("ros_gz_sim")
     ur_description_path_share = FindPackageShare("ur_description")
     ur_description_path_prefix = FindPackagePrefix("ur_description")
 
-    gz_launch_path = PathJoinSubstitution([ros_gz_sim_pkg_path, "launch", "gz_sim.launch.py"])
-
     ur_description_launch_path = PathJoinSubstitution(
         [ur_description_path_share, "launch", "view_ur.launch.py"]
+    )
+
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=['/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'],
+        output='screen'
     )
 
     gz_spawn_robot = Node(
@@ -113,10 +119,10 @@ def generate_launch_description():
             SetEnvironmentVariable(
                 "GZ_SIM_RESOURCE_PATH", PathJoinSubstitution([ur_description_path_prefix, "share"])
             ),
-            # SetEnvironmentVariable(
-            #     'GZ_SIM_PLUGIN_PATH',
-            #     PathJoinSubstitution([ur_description_mesh_path])
-            # ),
+            SetEnvironmentVariable(
+                'GZ_SIM_PLUGIN_PATH',
+                "/opt/ros/jazzy/lib/libgz_ros2_control-system.so" #PathJoinSubstitution(["/opt","ros","jazzy","lib/"])
+            ),
             SetEnvironmentVariable(
                 "GAZEBO_MODEL_PATH", PathJoinSubstitution([ur_description_path_prefix, "share"])
             )
