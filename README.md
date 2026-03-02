@@ -9,10 +9,6 @@ A 6dof robot manipulator + end-effector (e.g. 7dof) controlled using ROS2 Jazzy 
     - [Dependencies](#dependencies)
     - [Build](#build)
   - [Usage](#usage)
-  - [Dev Notes](#dev-notes)
-    - [Dev Dependencies](#dev-dependencies)
-    - [Github Actions](#github-actions)
-    - [How to use Git for this project:](#how-to-use-git-for-this-project)
 
 ## Project Description
 
@@ -46,25 +42,17 @@ colcon build --symlink
 
 ## Usage
 
+Make sure the dependencies are installed and ensure that the **hardcoded path in the [URDF](src/bartending_cobot_description/urdf/bartending_cobot.xacro.urdf) for the gazebo plugin tag is the correct path on your machine (this bug will be fixed shorted)** then run the following:
 
+Terminal 1
+```bash
+source /opt/ros/jazzy/setup.bash
+source ./install/setup.bash
+ros2 launch bartending_cobot_bringup r6bot.launch.py
+```
 
-## Dev Notes
-
-### Dev Dependencies
-Install all dependencies under the [dependencies section](#dependencies). 
-
-### Github Actions
-This repo implements various github actions to ensure a smooth CI/CD process and enable faster prototyping. The actions implemented are described below:
-- [pylint.yaml](.github/workflows/pylint.yml) workflow: This action is designed to ensure that code is the highest quality. It will find all the python files in the repo and then produce a lint.txt as an artifact which can be downloaded from Github.
-- [colcon_build.yaml](.github/workflows/colcon_build.yml) workflow: This action will create a ros2_jazzy dev env, install any dependencies, and then build the workspace. This action ensures that the committed code can be build on another machine. Currently, the tests are skipped since the codebase is fairly new. This will be removed once the codebase develops. More details available [here](https://github.com/ros-tooling/action-ros-ci).
-
-### How to use Git for this project:
-The project uses Git for version control. In order to ensure a clean, organized commit history, please follow these guidelines:
-- Make sure `pre-commit` command is installed.
-    - VS Code may return an error when using the IDE for committing changes. Try using the CLI `git commit -m "<message>"` if these errors cause issues.
-- Create a new branch for each feature or bug fix you work on. Use descriptive names for your branches.
-- Write clear and concise commit messages that describe the changes you made.
-- Before pushing your changes, ensure that your code is properly formatted and passes all tests.
-- Regularly pull changes from the main branch to keep your branch up to date.
-- Ensure that minor changes are squashed into larger commits to keep the commit history clean.
-    - Use interactive rebase (`git rebase -i`) to squash commits before merging ([guide](https://thoughtbot.com/blog/git-interactive-rebase-squash-amend-rewriting-history)).
+Terminal 2
+```bash
+source /opt/ros/jazzy/setup.bash
+ros2 run rqt_joint_trajectory_controller rqt_joint_trajectory_controller
+```
