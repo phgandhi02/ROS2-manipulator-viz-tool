@@ -21,18 +21,16 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare, FindPackagePrefix
 
+import os
+
 
 def generate_launch_description():
     # launch config vars to tell launch file that these args will be declared
     ur_type = LaunchConfiguration("ur_type")
     world_file = LaunchConfiguration("world_file")
-
-    ur_description_path_share = FindPackageShare("ur_description")
+    
     ur_description_path_prefix = FindPackagePrefix("ur_description")
-
-    ur_description_launch_path = PathJoinSubstitution(
-        [ur_description_path_share, "launch", "view_ur.launch.py"]
-    )
+    bartending_cobot_urdf = FindPackageShare("bartending_cobot_description")
 
     bridge = Node(
         package="ros_gz_bridge",
@@ -68,8 +66,9 @@ def generate_launch_description():
             }
         ],
         arguments=[
-            "/home/prem/code/bartending_cobot/src/bartending_cobot_description/urdf/bartending_cobot.xacro.urdf"
-        ],
+            PathJoinSubstitution([
+                bartending_cobot_urdf, "bartending_cobot.xacro.urdf"
+        ])],
     )
     ld = LaunchDescription(
         [

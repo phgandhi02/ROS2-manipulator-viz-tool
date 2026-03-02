@@ -417,7 +417,7 @@
   </ros2_control>
   <gazebo>
     <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>/home/prem/code/bartending_cobot/src/bartending_cobot_bringup/config/manipulator_controllers.yaml</parameters>
+      <parameters>/home/phgandh2/code/demos/bartending_cobot/src/bartending_cobot_bringup/config/manipulator_controllers.yaml</parameters>
     </plugin>
   </gazebo>
 </robot>
