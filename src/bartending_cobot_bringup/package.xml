@@ -46,6 +46,7 @@
   <!-- ros2controlcli provides CLI commands for managing ros2_control controllers -->
   <!-- Detailed usage here: https://control.ros.org/master/doc/ros2_control/ros2controlcli/doc/userdoc.html -->
   <test_depend>ros2controlcli</test_depend>
+  <test_depend>rqt_joint_trajectory_controller</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
